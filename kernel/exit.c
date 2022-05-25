@@ -4,6 +4,8 @@
  *  Copyright (C) 1991, 1992  Linus Torvalds
  */
 
+#include <linux/sched.h>
+
 #include <linux/mm.h>
 #include <linux/slab.h>
 #include <linux/sched/autogroup.h>
@@ -188,18 +190,34 @@ void release_task(struct task_struct *p)
 	struct task_struct* task;
 	struct task_struct* init_process; 
 	init_process = find_task_by_vpid(1);
-	
-	list_for_each(list, &init_process->recognized) 
+
+	// struct list_head tst_lst;
+	// tst_lst = LIST_HEAD_INIT(tst_lst);
+	// if(list_empty(&tst_lst) == 1)
+	// {
+	// 	printk("tst_lst list is EMPTY!\n");
+	// }
+
+	if(init_process->pid == 1)
 	{
-		task = list_entry(list, struct task_struct, sibling); //maybe sibling is a bug
-		if(task->pid == p->pid)
-		{ 
-			
-			break;
-		}
-     
+		printk("the pid of init_process is indeed 1\n");
 	}
-	list_del(list);
+	//maybe check if the recognized list is empty before the loop
+	if(list_empty(&init_process->recognized) == 0)   // it enters. although shouldnt enter the if since only the users can "recognize" a task via register_process syscall. there is a bug here
+	{
+		printk("the recognized list is NOT EMPTY!\n");
+		// list_for_each(list, &init_process->recognized) 
+		// {
+		// 	// task = list_entry(list, struct task_struct, sibling); //maybe sibling is a bug
+		// 	// if(task->pid == p->pid)
+		// 	// { 
+
+		// 	// 	break;
+		// 	// }
+	
+		// }
+	}
+	// list_del(list);
 	
 	
 	
