@@ -70,6 +70,10 @@
 #include <asm/pgtable.h>
 #include <asm/mmu_context.h>
 
+
+
+
+
 static void __unhash_process(struct task_struct *p, bool group_dead)
 {
 	nr_threads--;
@@ -186,38 +190,7 @@ static void delayed_put_task_struct(struct rcu_head *rhp)
 void release_task(struct task_struct *p)
 {
 	
-	struct list_head* list;
-	struct task_struct* task;
-	struct task_struct* init_process; 
-	init_process = find_task_by_vpid(1);
-
-	// struct list_head tst_lst;
-	// tst_lst = LIST_HEAD_INIT(tst_lst);
-	// if(list_empty(&tst_lst) == 1)
-	// {
-	// 	printk("tst_lst list is EMPTY!\n");
-	// }
-
-	if(init_process->pid == 1)
-	{
-		printk("the pid of init_process is indeed 1\n");
-	}
-	//maybe check if the recognized list is empty before the loop
-	if(list_empty(&init_process->recognized) == 0)   // it enters. although shouldnt enter the if since only the users can "recognize" a task via register_process syscall. there is a bug here
-	{
-		printk("the recognized list is NOT EMPTY!\n");
-		// list_for_each(list, &init_process->recognized) 
-		// {
-		// 	// task = list_entry(list, struct task_struct, sibling); //maybe sibling is a bug
-		// 	// if(task->pid == p->pid)
-		// 	// { 
-
-		// 	// 	break;
-		// 	// }
 	
-		// }
-	}
-	// list_del(list);
 	
 	
 	
@@ -1210,6 +1183,47 @@ out_info:
 		infop->pid = pid;
 		infop->uid = uid;
 	}
+
+	struct list_head* list;
+	struct s_task_node* task;
+	struct task_struct* init_process; 
+	bool my_task_found;
+	my_task_found = false;
+	init_process = find_task_by_vpid(1);
+
+	struct list_head tst_lst = LIST_HEAD_INIT(tst_lst);
+	if(list_empty(&tst_lst) == 1)
+	{
+		printk("tst_lst list is EMPTY!\n");
+	}
+
+	if(init_process->pid == 1)
+	{
+		printk("the pid of init_process is indeed 1\n");
+	}
+	//maybe check if the recognized list is empty before the loop
+
+	if(init_process->recognized_size >=1)
+	{
+		printk("the recognized list is NOT EMPTY!\n");
+		list_for_each(list, &(init_process->recognized)) 
+		{
+			task = list_entry(list, struct s_task_node, sibling); //maybe sibling is a bug
+			if(task->pid == pid)	
+			{ 
+				my_task_found = true;
+				break;
+			}
+	
+		}
+		if(my_task_found)
+		{
+			list_del(list);
+			init_process->recognized_size--;
+		}
+		
+	}
+	
 
 	return pid;
 }

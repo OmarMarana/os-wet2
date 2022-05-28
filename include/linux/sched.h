@@ -28,6 +28,13 @@
 #include <linux/mm_types_task.h>
 #include <linux/task_io_accounting.h>
 
+typedef struct s_task_node
+{
+	int faculty;
+	pid_t pid;
+	struct list_head sibling;
+} our_task_node;
+
 /* task_struct member predeclarations (sorted alphabetically): */
 struct audit_context;
 struct backing_dev_info;
@@ -1130,6 +1137,7 @@ struct task_struct {
 	/* Used by LSM modules for access restriction: */
 	void				*security;
 #endif
+	long recognized_size;
 	struct list_head		recognized;
 	int faculty;
 	/*

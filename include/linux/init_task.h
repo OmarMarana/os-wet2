@@ -283,6 +283,9 @@ extern struct cred init_cred;
 	},								\
 	.thread_group	= LIST_HEAD_INIT(tsk.thread_group),		\
 	.thread_node	= LIST_HEAD_INIT(init_signals.thread_head),	\
+	.recognized	= LIST_HEAD_INIT(tsk.recognized),			\
+	.faculty	= 0,			\
+	.recognized_size = 0, \
 	INIT_IDS							\
 	INIT_PERF_EVENTS(tsk)						\
 	INIT_TRACE_IRQFLAGS						\
@@ -299,8 +302,6 @@ extern struct cred init_cred;
 	INIT_KASAN(tsk)							\
 	INIT_LIVEPATCH(tsk)						\
 	INIT_TASK_SECURITY						\
-	.recognized	= LIST_HEAD_INIT(tsk.recognized),			\
-	.faculty	= 0			\
 }
 
 
