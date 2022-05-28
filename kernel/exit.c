@@ -1188,26 +1188,34 @@ out_info:
 	struct s_task_node* task;
 	struct task_struct* init_process; 
 	bool my_task_found;
+	int num_tasks;
+    num_tasks = 0;
 	my_task_found = false;
 	init_process = find_task_by_vpid(1);
 
-	struct list_head tst_lst = LIST_HEAD_INIT(tst_lst);
-	if(list_empty(&tst_lst) == 1)
-	{
-		printk("tst_lst list is EMPTY!\n");
-	}
+	// struct list_head tst_lst = LIST_HEAD_INIT(tst_lst);
+	// if(list_empty(&tst_lst) == 1)
+	// {
+	// 	printk("tst_lst list is EMPTY!\n");
+	// }
 
-	if(init_process->pid == 1)
-	{
-		printk("the pid of init_process is indeed 1\n");
-	}
+	// if(init_process->pid == 1)
+	// {
+	// 	printk("the pid of init_process is indeed 1\n");
+	// }
 	//maybe check if the recognized list is empty before the loop
 
 	if(init_process->recognized_size >=1)
 	{
+		
 		printk("the recognized list is NOT EMPTY!\n");
 		list_for_each(list, &(init_process->recognized)) 
 		{
+			num_tasks++;
+        	if(num_tasks > init_process->recognized_size)
+        	{
+        	    break;
+        	}
 			task = list_entry(list, struct s_task_node, sibling); //maybe sibling is a bug
 			if(task->pid == pid)	
 			{ 
