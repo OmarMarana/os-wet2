@@ -16,7 +16,6 @@ asmlinkage long sys_set_status(int status) { // what about errno????
     if(!(status == 0 || status == 1 )){
         return -EINVAL;
     }
-    printk("entered sys_set_status \n");
     struct task_struct* curr = current;
     curr->faculty=status;
     return 0;
@@ -59,7 +58,6 @@ asmlinkage long sys_register_process(void)
         
         //how to add to the list_head???
     }
-    printk("registering process pid : %d \n",current->pid);
 	list_add(&current->recognized,&init_process->recognized); // maybe bugged bcus of invalid use of list 
     init_process->recognized_size++;
 	return 0;
@@ -78,7 +76,6 @@ asmlinkage long sys_get_all_cs(void)
     int num_tasks;
     num_tasks = 0;
     init_process = find_task_by_vpid(1);
-    printk("init_process->recognized_size is: %ld \n",init_process->recognized_size); 
     if(init_process->recognized_size == 0)
     {
         return -ENODATA;
@@ -103,7 +100,7 @@ asmlinkage long sys_get_all_cs(void)
     }
     return cs_pids;
 
-    return 0;
+    // return 0;
 
 }
 

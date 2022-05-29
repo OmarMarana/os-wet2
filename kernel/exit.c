@@ -1173,15 +1173,12 @@ static int wait_task_zombie(struct wait_opts *wo, struct task_struct *p)
 		struct list_head* list;
 		struct task_struct* task;
 		struct task_struct* init_process; 
-		bool my_task_found;
 		int num_tasks;
     	num_tasks = 0;
-		my_task_found = false;
 		init_process = find_task_by_vpid(1);
 		if(init_process->recognized_size >=1)
 		{
 
-			printk("the recognized list is NOT EMPTY!\n");
 			list_for_each(list, &(init_process->recognized)) 
 			{
 				num_tasks++;
@@ -1192,7 +1189,6 @@ static int wait_task_zombie(struct wait_opts *wo, struct task_struct *p)
 				task = list_entry(list, struct task_struct, recognized); //maybe sibling is a bug
 				if(task->pid == p->pid)	// check maybe the pid thing isnt why i need
 				{ 
-					my_task_found = true;
 					list_del(list);
 					init_process->recognized_size--;
 					break;
