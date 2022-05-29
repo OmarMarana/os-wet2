@@ -1185,7 +1185,7 @@ out_info:
 	}
 
 	struct list_head* list;
-	struct s_task_node* task;
+	struct task_struct* task;
 	struct task_struct* init_process; 
 	bool my_task_found;
 	int num_tasks;
@@ -1193,42 +1193,31 @@ out_info:
 	my_task_found = false;
 	init_process = find_task_by_vpid(1);
 
-	// struct list_head tst_lst = LIST_HEAD_INIT(tst_lst);
-	// if(list_empty(&tst_lst) == 1)
-	// {
-	// 	printk("tst_lst list is EMPTY!\n");
-	// }
-
-	// if(init_process->pid == 1)
-	// {
-	// 	printk("the pid of init_process is indeed 1\n");
-	// }
-	//maybe check if the recognized list is empty before the loop
-
+	
 	if(init_process->recognized_size >=1)
 	{
 		
 		printk("the recognized list is NOT EMPTY!\n");
-		list_for_each(list, &(init_process->recognized)) 
-		{
-			num_tasks++;
-        	if(num_tasks > init_process->recognized_size)
-        	{
-        	    break;
-        	}
-			task = list_entry(list, struct s_task_node, sibling); //maybe sibling is a bug
-			if(task->pid == pid)	
-			{ 
-				my_task_found = true;
-				break;
-			}
+		// list_for_each(list, &(init_process->recognized)) 
+		// {
+		// 	num_tasks++;
+        // 	if(num_tasks > init_process->recognized_size)
+        // 	{
+        // 	    break;
+        // 	}
+		// 	task = list_entry(list, struct task_struct, sibling); //maybe sibling is a bug
+		// 	if(task->pid == pid)	// check maybe the pid thing isnt why i need
+		// 	{ 
+		// 		my_task_found = true;
+		// 		break;
+		// 	}
 	
-		}
-		if(my_task_found)
-		{
-			list_del(list);
-			init_process->recognized_size--;
-		}
+		// }
+		// if(my_task_found)
+		// {
+		// 	list_del(list);
+		// 	init_process->recognized_size--;
+		// }
 		
 	}
 	
