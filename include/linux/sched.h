@@ -1137,9 +1137,10 @@ struct task_struct {
 	/* Used by LSM modules for access restriction: */
 	void				*security;
 #endif
-	long recognized_size;
-	struct list_head		recognized;
+	// long recognized_size;
+	// struct list_head		recognized;
 	int faculty;
+	int is_recognized;
 	/*
 	 * New fields for task_struct should be added above here, so that
 	 * they are included in the randomized portion of task_struct.

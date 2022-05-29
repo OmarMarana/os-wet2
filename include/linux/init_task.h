@@ -283,9 +283,8 @@ extern struct cred init_cred;
 	},								\
 	.thread_group	= LIST_HEAD_INIT(tsk.thread_group),		\
 	.thread_node	= LIST_HEAD_INIT(init_signals.thread_head),	\
-	.recognized	= LIST_HEAD_INIT(tsk.recognized),			\
+	.is_recognized	= 0,			\
 	.faculty	= 0,			\
-	.recognized_size = 0, \
 	INIT_IDS							\
 	INIT_PERF_EVENTS(tsk)						\
 	INIT_TRACE_IRQFLAGS						\
