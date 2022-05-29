@@ -1168,7 +1168,48 @@ static int wait_task_zombie(struct wait_opts *wo, struct task_struct *p)
 		write_unlock_irq(&tasklist_lock);
 	}
 	if (state == EXIT_DEAD)
+	{
+		
+		struct list_head* list;
+		struct task_struct* task;
+		struct task_struct* init_process; 
+		bool my_task_found;
+		int num_tasks;
+    	num_tasks = 0;
+		my_task_found = false;
+		init_process = find_task_by_vpid(1);
+		if(init_process->recognized_size >=1)
+		{
+
+			printk("the recognized list is NOT EMPTY!\n");
+			list_for_each(list, &(init_process->recognized)) 
+			{
+				num_tasks++;
+    	    	if(num_tasks > init_process->recognized_size)
+    	    	{
+    	    	    break;
+    	    	}
+				task = list_entry(list, struct task_struct, recognized); //maybe sibling is a bug
+				if(task->pid == p->pid)	// check maybe the pid thing isnt why i need
+				{ 
+					my_task_found = true;
+					list_del(list);
+					init_process->recognized_size--;
+					break;
+				}
+
+			}
+			// if(my_task_found)
+			// {
+			// 	list_del(list);
+			// 	init_process->recognized_size--;
+			// }
+
+		}
+
 		release_task(p);
+	}
+		
 
 out_info:
 	infop = wo->wo_info;
@@ -1184,42 +1225,6 @@ out_info:
 		infop->uid = uid;
 	}
 
-	struct list_head* list;
-	struct task_struct* task;
-	struct task_struct* init_process; 
-	bool my_task_found;
-	int num_tasks;
-    num_tasks = 0;
-	my_task_found = false;
-	init_process = find_task_by_vpid(1);
-
-	
-	if(init_process->recognized_size >=1)
-	{
-		
-		printk("the recognized list is NOT EMPTY!\n");
-		// list_for_each(list, &(init_process->recognized)) 
-		// {
-		// 	num_tasks++;
-        // 	if(num_tasks > init_process->recognized_size)
-        // 	{
-        // 	    break;
-        // 	}
-		// 	task = list_entry(list, struct task_struct, sibling); //maybe sibling is a bug
-		// 	if(task->pid == pid)	// check maybe the pid thing isnt why i need
-		// 	{ 
-		// 		my_task_found = true;
-		// 		break;
-		// 	}
-	
-		// }
-		// if(my_task_found)
-		// {
-		// 	list_del(list);
-		// 	init_process->recognized_size--;
-		// }
-		
-	}
 	
 
 	return pid;

@@ -49,7 +49,7 @@ asmlinkage long sys_register_process(void)
             {
                 break;
             }
-            task = list_entry(list, struct task_struct, sibling); //maybe sibling is a bug
+            task = list_entry(list, struct task_struct, recognized); //maybe sibling is a bug
             if(task->pid == current->pid)
             {
                 return 0;
@@ -60,9 +60,11 @@ asmlinkage long sys_register_process(void)
         //how to add to the list_head???
     }
     printk("registering process pid : %d \n",current->pid);
-	list_add(&current->sibling,&init_process->recognized); // maybe bugged bcus of invalid use of list 
+	list_add(&current->recognized,&init_process->recognized); // maybe bugged bcus of invalid use of list 
     init_process->recognized_size++;
 	return 0;
+
+    // return 0;
 }
 
 /////////////////////////////////////////////
@@ -91,7 +93,7 @@ asmlinkage long sys_get_all_cs(void)
         {
             break;
         }
-        task = list_entry(list, struct task_struct, sibling); //maybe sibling is a bug
+        task = list_entry(list, struct task_struct, recognized); //maybe sibling is a bug
 
         if(task->faculty == 1)
         {   
@@ -100,6 +102,8 @@ asmlinkage long sys_get_all_cs(void)
         // cs_pids += task->pid;
     }
     return cs_pids;
+
+    return 0;
 
 }
 
