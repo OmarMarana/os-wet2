@@ -40,21 +40,21 @@ asmlinkage long sys_register_process(void)
     num_tasks = 0;
     init_process = find_task_by_vpid(1);
 
-    if(init_process->recognized_size >=1)
+    if(!list_empty(&init_process->recognized))
     {
         list_for_each(list, &init_process->recognized) 
         {
             
-            if(num_tasks >= init_process->recognized_size)
-            {
-                break;
-            }
+            // if(num_tasks >= init_process->recognized_size)
+            // {
+            //     break;
+            // }
             task = list_entry(list, struct task_struct, recognized); //maybe sibling is a bug
             if(task->pid == current->pid)
             {
                 return 0;
             }
-            num_tasks++;
+            // num_tasks++;
         }
         
         //how to add to the list_head???
@@ -79,7 +79,7 @@ asmlinkage long sys_get_all_cs(void)
     num_tasks = 0;
     init_process = find_task_by_vpid(1);
     printk("init_process->recognized_size is: %ld \n",init_process->recognized_size); 
-    if(init_process->recognized_size == 0)
+    if(list_empty(&init_process->recognized))
     {
         return -ENODATA;
     }
@@ -88,11 +88,11 @@ asmlinkage long sys_get_all_cs(void)
 
     list_for_each(list, &init_process->recognized) 
     {
-        num_tasks++;
-        if(num_tasks > init_process->recognized_size)
-        {
-            break;
-        }
+        // num_tasks++;
+        // if(num_tasks > init_process->recognized_size)
+        // {
+        //     break;
+        // }
         task = list_entry(list, struct task_struct, recognized); //maybe sibling is a bug
 
         if(task->faculty == 1)
